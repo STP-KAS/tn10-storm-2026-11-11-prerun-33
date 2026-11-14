@@ -20,7 +20,11 @@ What stays put, so it is not a second knob:
 Two recorded facts that are not a second knob:
 
 - The Mini is not reachable from this desk. This run has one counter, the desk node. [logs/MINI-NOT-REACHABLE.md](../logs/MINI-NOT-REACHABLE.md) is on origin before the arm. We do not write a Mini-armed file.
-- Keys 1 and 2 are not used. One distinct key per family. The payment pile is a different key. It is split, before the hashes, into at least 6,000 coins above 1 tKAS, because a coin is reused about once a second and the 4,053 minute needs that many. If a family key has no coin of at least 15 tKAS after pre-run 32, it receives 20 tKAS from the sender key before the hashes. That top-up is logged.
+- Keys 1 and 2 are not used. One distinct key per family. The payment pile is a different key. The tool counts a pile coin only when it is over 10 tKAS (and under 100,000). A coin is reused about once a second, so the 4,053 minute needs at least that many coins. The payment key holds about 69,000 tKAS, which funds on the order of 5,500 coins at 12 tKAS, not 6,000. 5,500 still covers 4,053, with less spare than the old 6,000 line. We wait until those coins' block DAA is behind the tip before the open, because a fresh coin with sequence 0 is rejected until then. If a family key has no coin of at least 15 tKAS after pre-run 32, it receives 20 tKAS from the sender key before the hashes. That top-up is logged.
+
+## A correction on this page, before any submit
+
+The first commit of this plan said the pile coins had to be above 1 tKAS, and that we would cut at least 6,000 of them. That was our misreading. The preflight counts a coin only above 10 tKAS. This paragraph is the correction. The prediction page is not touched.
 
 ## What we are checking in our own earlier pages
 
@@ -32,7 +36,7 @@ Two recorded facts that are not a second knob:
 
 1. Disk floor written. Desk free space at 2026-11-14T11:59:23Z: 340.05 GB. Abort under 150 GB. The desk node is not restarted.
 2. Free check, read-only, committed before any submit. Names that do not answer are logged and dropped. A raw address found by a scan is not a send target.
-3. Payment-pile split, logged, before the hashes. Family top-up only if a key is short.
+3. Payment-pile split, logged, before the hashes. Coins over 10 tKAS, about 12 tKAS each, as many as the payment key can fund (about 5,500, not 6,000). Family top-up only if a key is short. The new coins are left until their block DAA is behind the tip.
 4. Hashes first. Thirteen rows in [hashes/SIXTEEN.md](../hashes/README.md) (the file keeps that name). The offline check builds them and does not submit.
 5. `PRE-RUN-OPEN`, then genesis of the thirteen covenants, then the lines, then the ladder.
 
